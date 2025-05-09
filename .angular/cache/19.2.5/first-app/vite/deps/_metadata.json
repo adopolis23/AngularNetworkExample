@@ -1,0 +1,25 @@
+{
+  "hash": "8cb879fb",
+  "configHash": "02e884c3",
+  "lockfileHash": "62bdacfc",
+  "browserHash": "8d87f71e",
+  "optimized": {
+    "@angular/core": {
+      "src": "../../../../../../node_modules/@angular/core/fesm2022/core.mjs",
+      "file": "@angular_core.js",
+      "fileHash": "b239d793",
+      "needsInterop": false
+    },
+    "@angular/platform-browser": {
+      "src": "../../../../../../node_modules/@angular/platform-browser/fesm2022/platform-browser.mjs",
+      "file": "@angular_platform-browser.js",
+      "fileHash": "35d7d3c2",
+      "needsInterop": false
+    }
+  },
+  "chunks": {
+    "chunk-3XPRMCCN": {
+      "file": "chunk-3XPRMCCN.js"
+    }
+  }
+}
