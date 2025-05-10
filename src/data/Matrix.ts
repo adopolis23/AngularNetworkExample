@@ -1,5 +1,3 @@
-import { MarkOptions } from "perf_hooks";
-
 
 export class Matrix2D
 {
@@ -42,11 +40,74 @@ export class Matrix2D
         let matrix: Matrix2D = new Matrix2D(data.length, data[0].length);
         matrix.SetData(data);
         return matrix;
+    }
 
+    public GetRow(row: number): number[]
+    {
+        return this._data[row];
+    }
+
+    public GetCol(col: number): number[]
+    {
+        //creates array with a length equal to the totaL number of rows
+        let result: number[] = Array.from({ length: this._rows });
+
+        for (let i = 0; i < this._rows; i++)
+        {
+            result[i] = this._data[i][col];
+        }
+
+        return result;
     }
 
     public Add(other: Matrix2D): Matrix2D
     {
+        if (other.Cols() != this._cols || other.Rows() != this._rows)
+        {
+            throw new Error("Rows and Cols length must match to add element-wise.");
+        }
+
+        let newData: number[][] = this._data.map((row, i) => row.map((value, j) => value + other.Data()[i][j]));
+
+        let result: Matrix2D = new Matrix2D(this._rows, this._cols);
+        result.FromArray(newData);
+
+        return result;
+    }
+
+    public CrossProduct(other: Matrix2D): Matrix2D
+    {
+        const rowA = this._rows;
+        const colA = this._cols;
+        const rowB = other.Rows();
+        const colB = other.Cols();
+
+        if (other.Rows() != this._cols)
+        {
+            throw new Error("Rows of B must be equal to Columns of A.");
+        }
+
+        let newData: number[][] = Array.from({ length: this._rows }, () => Array(other.Cols()).fill(0));
+
+        //nested for loop goes through each position in the output array and computes the dot product of the row and col from the two input arrays.
+        for (let i = 0; i < rowA; i++)
+        {
+            for (let j = 0; j < colB; j++)
+            {
+                let rowOfA: number[] = this.GetRow(i);
+                let colOfB: number[] = other.GetCol(j);
+
+                // computes the dot product by multiplying two arrays element wise then sums their values. 
+                let dot: number = rowOfA.map((value, index) => value * colOfB[index]).reduce((acc, value) => acc + value, 0);
+
+                newData[i][j] = dot;
+            }
+        }
+
+        let result: Matrix2D = new Matrix2D(this._rows, other.Cols());
+        result.FromArray(newData);
+
+        return result;
 
     }
 
