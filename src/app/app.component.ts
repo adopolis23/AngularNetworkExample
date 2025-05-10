@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Matrix2D } from 'src/data/Matrix';
 import { PixelCanvasComponent } from './pixel-canvas/pixel-canvas.component';
+import { FullyConnectedNetwork } from 'src/data/FullyConnectedNetwork';
 
 @Component({
   selector: 'app-root',
@@ -11,13 +12,17 @@ import { PixelCanvasComponent } from './pixel-canvas/pixel-canvas.component';
   styleUrls: ['./app.component.css'],
 })
 export class AppComponent {
-  matrix1: Matrix2D = new Matrix2D(2, 2);
-  matrix2: Matrix2D = new Matrix2D(2, 1);
   
-  matrix3: Matrix2D = this.matrix1.CrossProduct(this.matrix2);
+  fcn: FullyConnectedNetwork;
 
   constructor() {
-    console.log(this.matrix3.Data());
+    this.fcn = new FullyConnectedNetwork(2, 1, 1);
+
+    let input: Matrix2D = new Matrix2D(2, 1);
+
+    let output = this.fcn.Predict(input);
+
+    console.log(output.Data());
   }
 
   title = 'default';

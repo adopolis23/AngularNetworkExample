@@ -4,9 +4,7 @@ import { Component } from '@angular/core';
   selector: 'app-pixel-canvas',
   imports: [],
   template: `
-    <p>
-      pixel-canvas works!
-    </p>
+    <canvas #canvas width="500" height="500"></canvas>
   `,
   styles: ``
 })

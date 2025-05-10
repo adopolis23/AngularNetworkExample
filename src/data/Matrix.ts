@@ -47,6 +47,12 @@ export class Matrix2D
         return this._data[row];
     }
 
+    //takes in a function and applies it to every value in data.
+    public Map(func: (value: number) => number)
+    {
+        this._data = this._data.map(row => row.map(func));
+    }
+
     public GetCol(col: number): number[]
     {
         //creates array with a length equal to the totaL number of rows
@@ -75,6 +81,7 @@ export class Matrix2D
         return result;
     }
 
+    //probably a very innefiect cross product algorithm TODO: look up better way.
     public CrossProduct(other: Matrix2D): Matrix2D
     {
         const rowA = this._rows;
