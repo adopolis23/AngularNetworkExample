@@ -12,7 +12,28 @@ export class Matrix2D
         this._cols = cols;
 
         //for now init random
-        this._data = Array.from({ length: rows }, () => Array(cols).fill(Math.random()));
+        this._data = Array.from({ length: rows }, () => Array(cols));
+        this.Randomize(1);
+    }
+
+    //STATIC method that returns a new matrix2d from a number[][]
+    static FromArray(data: number[][]): Matrix2D
+    {
+        let matrix: Matrix2D = new Matrix2D(data.length, data[0].length);
+        matrix.SetData(data);
+        return matrix;
+    }
+
+
+    public Randomize(max: number)
+    {
+        for (let i = 0; i < this._rows; i++)
+        {
+            for (let j = 0; j < this._cols; j++)
+            {
+                this._data[i][j] = Math.random() * max;
+            }
+        }
     }
 
     public Data(): number[][]
@@ -33,13 +54,6 @@ export class Matrix2D
     public SetData(data: number[][])
     {
         this._data = data;
-    }
-
-    public FromArray(data: number[][]): Matrix2D
-    {
-        let matrix: Matrix2D = new Matrix2D(data.length, data[0].length);
-        matrix.SetData(data);
-        return matrix;
     }
 
     public GetRow(row: number): number[]
@@ -75,8 +89,8 @@ export class Matrix2D
 
         let newData: number[][] = this._data.map((row, i) => row.map((value, j) => value + other.Data()[i][j]));
 
-        let result: Matrix2D = new Matrix2D(this._rows, this._cols);
-        result.FromArray(newData);
+        let result: Matrix2D = Matrix2D.FromArray(newData);
+
 
         return result;
     }
@@ -111,8 +125,7 @@ export class Matrix2D
             }
         }
 
-        let result: Matrix2D = new Matrix2D(this._rows, other.Cols());
-        result.FromArray(newData);
+        let result: Matrix2D = Matrix2D.FromArray(newData);
 
         return result;
 

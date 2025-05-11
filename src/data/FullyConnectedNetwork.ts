@@ -43,4 +43,19 @@ export class FullyConnectedNetwork
         return output;
     }
 
+    public PrintToConsole(): void
+    {
+        console.log("# of Input Nodes: " + this.hidden_0.Cols());
+        console.log("Weights Between Input and Hidden: ");
+        console.log(this.hidden_0.Data());
+        console.log("# of Hidden Nodes: " + this.hidden_0.Rows());
+        console.log("Hidden Node Bias: ");
+        console.log(this.bias_0.Data());
+        console.log("Weights Between Hidden and Output: ");
+        console.log(this.hidden_1.Data());
+        console.log("# of Output Nodes: " + this.hidden_1.Rows());
+        console.log("Output Node Bias: ");
+        console.log(this.bias_1.Data());
+    }
+
 }

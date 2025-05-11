@@ -12,18 +12,5 @@ import { FullyConnectedNetwork } from 'src/data/FullyConnectedNetwork';
   styleUrls: ['./app.component.css'],
 })
 export class AppComponent {
-  
-  fcn: FullyConnectedNetwork;
-
-  constructor() {
-    this.fcn = new FullyConnectedNetwork(2, 1, 1);
-
-    let input: Matrix2D = new Matrix2D(2, 1);
-
-    let output = this.fcn.Predict(input);
-
-    console.log(output.Data());
-  }
-
-  title = 'default';
+  title = 'XOR Problem';
 }
