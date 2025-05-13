@@ -10,6 +10,8 @@ export class FullyConnectedNetwork
     private bias_0: Matrix2D;
     private bias_1: Matrix2D;
 
+    private LearningRate: number;
+
 
     constructor(input: number, hidden: number, output: number)
     {
@@ -19,12 +21,19 @@ export class FullyConnectedNetwork
         this.bias_0 = new Matrix2D(hidden, 1);
         this.bias_1 = new Matrix2D(output, 1);
 
+        this.LearningRate = 1;
+
     }
 
     //activation function definition
     private Sigmoid(input: number): number
     {
         return 1 / (1 + Math.exp(-1 * input))
+    }
+
+    public SetLearningRate(lr: number)
+    {
+        this.LearningRate = lr;
     }
 
     public Predict(inputMatrix: Matrix2D): Matrix2D
@@ -42,6 +51,25 @@ export class FullyConnectedNetwork
 
         return output;
     }
+
+
+    public Train(input: Matrix2D, target: Matrix2D): void
+    {
+
+        if (input.Cols() != this.hidden_0.Cols() || target.Cols() != this.hidden_1.Rows())
+        {
+            throw new Error("Input or Target dimentions do not match the network.");
+        }
+
+        let finalOutput: Matrix2D = this.Predict(input);
+        let outputError: Matrix2D = target.Sub(finalOutput);
+
+        //output unit error = output * (1 - output) * (target - output)
+        let outputUnitError: Matrix2D = finalOutput.Mul(finalOutput.AddScalar(-1)).Mul(outputError);
+
+        
+    }
+
 
     public PrintToConsole(): void
     {

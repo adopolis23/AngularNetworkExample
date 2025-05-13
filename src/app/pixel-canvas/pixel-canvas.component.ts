@@ -1,22 +1,28 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { Matrix2D } from 'src/data/Matrix';
 import { FullyConnectedNetwork } from 'src/data/FullyConnectedNetwork';
+import { NumberValueAccessor } from '@angular/forms';
 
 @Component({
   selector: 'app-pixel-canvas',
   imports: [],
   template: `
-    <canvas #canvas width="10" height="10"></canvas>
+    <canvas #canvas width="100" height="100"></canvas>
   `,
   styles: ``
 })
 export class PixelCanvasComponent {
   @ViewChild('canvas', { static: true }) pixelCanvas!: ElementRef<HTMLCanvasElement>;
   network: FullyConnectedNetwork;
+  virtualHeight: number;
+  virtualWidth: number;
 
   constructor()
   {
     this.network = new FullyConnectedNetwork(2, 1, 1);
+  
+    this.virtualHeight = 10;
+    this.virtualWidth = 10;
   }
 
   ngOnInit(): void {
@@ -28,13 +34,15 @@ export class PixelCanvasComponent {
     const canvas = this.pixelCanvas.nativeElement;
     const ctx = canvas.getContext('2d');
 
+    const realHeight = canvas.width;
+    const realWidth = canvas.height;
+
+    const blockSize: number = realHeight / this.virtualHeight;
+
     if (!ctx) return;
 
-    const width = canvas.width;
-    const height = canvas.height;
-
-    for (let x = 0; x < width; x++) {
-      for (let y = 0; y < height; y++) {
+    for (let x = 0; x < realWidth-blockSize; x += blockSize) {
+      for (let y = 0; y < realHeight-blockSize; y += blockSize) {
         
         const inputArray: number[][] = [
           [x], // First row with one column
@@ -52,10 +60,10 @@ export class PixelCanvasComponent {
 
         let color = `rgb(${red}, ${green}, ${blue})`;
 
-        console.log("For Coords: " + x + "," + y + " pred: " + singleOutput + " Color: " + color);
+        //console.log("For Coords: " + x + "," + y + " pred: " + singleOutput + " Color: " + color);
 
         ctx.fillStyle = color;
-        ctx.fillRect(x, y, 1, 1);
+        ctx.fillRect(x, y, blockSize, blockSize);
       }
     }
 

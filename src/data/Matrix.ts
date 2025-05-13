@@ -80,6 +80,7 @@ export class Matrix2D
         return result;
     }
 
+    //element wise add
     public Add(other: Matrix2D): Matrix2D
     {
         if (other.Cols() != this._cols || other.Rows() != this._rows)
@@ -88,6 +89,46 @@ export class Matrix2D
         }
 
         let newData: number[][] = this._data.map((row, i) => row.map((value, j) => value + other.Data()[i][j]));
+
+        let result: Matrix2D = Matrix2D.FromArray(newData);
+
+
+        return result;
+    }
+
+    //add a scalar value to every number in the matrix
+    public AddScalar(scalar: number): Matrix2D
+    {
+        let newData: number[][] = this._data.map((row, i) => row.map((value, j) => value + scalar));
+        let result: Matrix2D = Matrix2D.FromArray(newData);
+        return result;
+    }
+
+    //element wise subtract
+    public Sub(other: Matrix2D): Matrix2D
+    {
+        if (other.Cols() != this._cols || other.Rows() != this._rows)
+        {
+            throw new Error("Rows and Cols length must match to add element-wise.");
+        }
+
+        let newData: number[][] = this._data.map((row, i) => row.map((value, j) => value - other.Data()[i][j]));
+
+        let result: Matrix2D = Matrix2D.FromArray(newData);
+
+
+        return result;
+    }
+
+    //element wise Multiply
+    public Mul(other: Matrix2D): Matrix2D
+    {
+        if (other.Cols() != this._cols || other.Rows() != this._rows)
+        {
+            throw new Error("Rows and Cols length must match to add element-wise.");
+        }
+
+        let newData: number[][] = this._data.map((row, i) => row.map((value, j) => value * other.Data()[i][j]));
 
         let result: Matrix2D = Matrix2D.FromArray(newData);
 
