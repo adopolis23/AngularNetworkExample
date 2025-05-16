@@ -141,6 +141,14 @@ export class Matrix2D
         return result;
     }
 
+    //add a scalar value to every number in the matrix
+    public MulScalar(scalar: number): Matrix2D
+    {
+        let newData: number[][] = this._data.map((row, i) => row.map((value, j) => value * scalar));
+        let result: Matrix2D = Matrix2D.FromArray(newData);
+        return result;
+    }
+
     //probably a very innefiect cross product algorithm TODO: look up better way.
     //this might actially be a dot product now that I think about it
     public CrossProduct(other: Matrix2D): Matrix2D
@@ -178,6 +186,10 @@ export class Matrix2D
 
     }
 
+    // public Dot(other: Matrix2D): Matrix2D
+    // {
+        
+    // }
 
     public Transpose(): Matrix2D
     {

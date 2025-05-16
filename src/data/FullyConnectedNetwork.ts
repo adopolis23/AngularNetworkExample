@@ -5,7 +5,7 @@ export class FullyConnectedNetwork
 {
 
     private hidden_0: Matrix2D;
-    private hidden_1: Matrix2D;
+    public hidden_1: Matrix2D;
 
     private bias_0: Matrix2D;
     private bias_1: Matrix2D;
@@ -25,7 +25,7 @@ export class FullyConnectedNetwork
 
         this.hidden_output = new Matrix2D(hidden, 1);
 
-        this.LearningRate = 1;
+        this.LearningRate = 0.01;
 
     }
 
@@ -66,7 +66,7 @@ export class FullyConnectedNetwork
     public Train(input: Matrix2D, target: Matrix2D): void
     {
 
-        if (input.Cols() != this.hidden_0.Cols() || target.Cols() != this.hidden_1.Rows())
+        if (input.Rows() != this.hidden_0.Cols() || target.Rows() != this.hidden_1.Rows())
         {
             throw new Error("Input or Target dimentions do not match the network.");
         }
@@ -96,7 +96,8 @@ export class FullyConnectedNetwork
         let hidden_delta: Matrix2D = hidden_error.Mul(hiddenOutputTimesSigmoidDer);
 
         //update weights in the hidden to output layer
-        this.hidden_1.Add();
+        let hidden_1_delta: Matrix2D = this.hidden_output.CrossProduct(output_delta.Transpose()).MulScalar(this.LearningRate);
+        this.hidden_1 = this.hidden_1.Add(hidden_1_delta);
         
     }
 
