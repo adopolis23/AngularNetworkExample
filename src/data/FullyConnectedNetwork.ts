@@ -10,6 +10,8 @@ export class FullyConnectedNetwork
     private bias_0: Matrix2D;
     private bias_1: Matrix2D;
 
+    private hidden_output: Matrix2D;
+
     private LearningRate: number;
 
 
@@ -21,6 +23,8 @@ export class FullyConnectedNetwork
         this.bias_0 = new Matrix2D(hidden, 1);
         this.bias_1 = new Matrix2D(output, 1);
 
+        this.hidden_output = new Matrix2D(hidden, 1);
+
         this.LearningRate = 1;
 
     }
@@ -29,6 +33,12 @@ export class FullyConnectedNetwork
     private Sigmoid(input: number): number
     {
         return 1 / (1 + Math.exp(-1 * input))
+    }
+
+    //derivative of the activation function sigmoid
+    private Sigmoid_Derivative(input: number): number
+    {
+        return input * (1 - input)
     }
 
     public SetLearningRate(lr: number)
@@ -43,10 +53,10 @@ export class FullyConnectedNetwork
             throw new Error("Input matrix not correct dimentions.");
         }
 
-        let hidden_out: Matrix2D = this.hidden_0.CrossProduct(inputMatrix).Add(this.bias_0);
-        hidden_out.Map(this.Sigmoid);
+        this.hidden_output = this.hidden_0.CrossProduct(inputMatrix).Add(this.bias_0);
+        this.hidden_output.Map(this.Sigmoid);
 
-        let output: Matrix2D = this.hidden_1.CrossProduct(hidden_out).Add(this.bias_1);
+        let output: Matrix2D = this.hidden_1.CrossProduct(this.hidden_output).Add(this.bias_1);
         output.Map(this.Sigmoid);
 
         return output;
@@ -61,12 +71,32 @@ export class FullyConnectedNetwork
             throw new Error("Input or Target dimentions do not match the network.");
         }
 
-        let finalOutput: Matrix2D = this.Predict(input);
-        let outputError: Matrix2D = target.Sub(finalOutput);
+        let predictedOutput: Matrix2D = this.Predict(input);
+
+        let outputError: Matrix2D = target.Sub(predictedOutput);
 
         //output unit error = output * (1 - output) * (target - output)
-        let outputUnitError: Matrix2D = finalOutput.Mul(finalOutput.AddScalar(-1)).Mul(outputError);
+        //let outputUnitError: Matrix2D = finalOutput.Mul(finalOutput.AddScalar(-1)).Mul(outputError);
 
+        //create a matrix to hold the predicted output times the derivative of sigmoid
+        let predictedOutputTimesSigmoidDer: Matrix2D = predictedOutput;
+        predictedOutputTimesSigmoidDer.Map(this.Sigmoid_Derivative);
+
+        let output_delta: Matrix2D = outputError.Mul(predictedOutputTimesSigmoidDer);
+
+        //transpose of the hidden to output weights
+        let hidden_1_t: Matrix2D = this.hidden_1.Transpose();
+
+        let hidden_error: Matrix2D = hidden_1_t.CrossProduct(output_delta);
+
+        //create a matrix to hold the hidden output times the derivative of sigmoid
+        let hiddenOutputTimesSigmoidDer: Matrix2D = this.hidden_output;
+        hiddenOutputTimesSigmoidDer.Map(this.Sigmoid_Derivative);
+
+        let hidden_delta: Matrix2D = hidden_error.Mul(hiddenOutputTimesSigmoidDer);
+
+        //update weights in the hidden to output layer
+        this.hidden_1.Add();
         
     }
 

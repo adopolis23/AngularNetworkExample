@@ -56,6 +56,11 @@ export class Matrix2D
         this._data = data;
     }
 
+    public Set(row: number, col: number, value: number)
+    {
+        this._data[row][col] = value;
+    }
+
     public GetRow(row: number): number[]
     {
         return this._data[row];
@@ -137,6 +142,7 @@ export class Matrix2D
     }
 
     //probably a very innefiect cross product algorithm TODO: look up better way.
+    //this might actially be a dot product now that I think about it
     public CrossProduct(other: Matrix2D): Matrix2D
     {
         const rowA = this._rows;
@@ -170,6 +176,23 @@ export class Matrix2D
 
         return result;
 
+    }
+
+
+    public Transpose(): Matrix2D
+    {
+        //result matrix has the rows and cols swapped for transpose
+        let result: Matrix2D = new Matrix2D(this._cols, this._rows);
+
+        for (let col = 0; col < this._cols; col++)
+        {
+            for (let row = 0; row < this._rows; row++)
+            {
+                result.Set(result.Rows() - col - 1, row, this._data[row][col]);
+            }
+        }
+
+        return result;
     }
 
 }

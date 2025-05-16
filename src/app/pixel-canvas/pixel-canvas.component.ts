@@ -26,7 +26,7 @@ export class PixelCanvasComponent {
   }
 
   ngOnInit(): void {
-    this.network.PrintToConsole();
+    //this.network.PrintToConsole();
     this.drawCanvas();
   }
 
