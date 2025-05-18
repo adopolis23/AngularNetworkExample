@@ -7,7 +7,8 @@ import { NumberValueAccessor } from '@angular/forms';
   selector: 'app-pixel-canvas',
   imports: [],
   template: `
-    <canvas #canvas width="100" height="100" style="border: 1px solid black;"></canvas>
+    <canvas #canvas width="110" height="110" style="border: 1px solid black;"></canvas>
+    <button (click)="ResetNetwork()">Reset Network</button>
   `,
   styles: ``
 })
@@ -16,33 +17,37 @@ export class PixelCanvasComponent {
   network: FullyConnectedNetwork;
   virtualHeight: number;
   virtualWidth: number;
+  AnimationFrameId: number;
 
   constructor()
   {
-    this.network = new FullyConnectedNetwork(2, 100, 1);
+    this.network = new FullyConnectedNetwork(2, 25, 1);
   
     this.virtualHeight = 10;
     this.virtualWidth = 10;
+
+    this.AnimationFrameId = 0;
   }
 
   async ngOnInit(): Promise<void> {
-    //this.network.PrintToConsole();
     let x: number = 0;
-    while (x < 1000)
-    {
+
+    const animate = () => {
       this.drawCanvas();
       this.trainNetwork();
-      //await this.delay(500);
-      
-      //this is a test prediction to see in the console if all is working
-      let x_0: Matrix2D = Matrix2D.FromArray([[1], [1]]);
-      let output: Matrix2D = this.network.Predict(x_0);
-      
-      if (x % 100 == 0)
-      console.log(output.Data()[0][0]);
 
-      x = x + 1;
-    }
+      if (x % 100 === 0) {
+        console.log("Epoch number: " + x);
+      }
+
+      x++;
+      if (x < 1000) {
+        this.AnimationFrameId = requestAnimationFrame(animate);
+      }
+    };
+
+    // Start animation
+    this.AnimationFrameId = requestAnimationFrame(animate);
   }
 
   trainNetwork(): void
@@ -84,7 +89,9 @@ export class PixelCanvasComponent {
     this.network.Train(x_3_matrix, y_3_matrix);
   }
 
-  drawCanvas(): void {
+  drawCanvas(): void 
+  {
+    //TODO: could probably optimize by not getting the canvas and context every frame
     const canvas = this.pixelCanvas.nativeElement;
     const ctx = canvas.getContext('2d');
 
@@ -94,14 +101,17 @@ export class PixelCanvasComponent {
     const realHeight = canvas.width;
     const realWidth = canvas.height;
 
-    const blockSize: number = realHeight / this.virtualHeight;
+    const blockSize: number = this.virtualHeight;
 
-    for (let x = 0; x <= realWidth-blockSize; x += blockSize) {
-      for (let y = 0; y <= realHeight-blockSize; y += blockSize) {
-        
+
+    for (let x = 0; x <= 1.0; x += 0.1)
+    {
+      for (let y = 0; y <= 1.0; y += 0.1)
+      {
+
         const inputArray: number[][] = [
-          [x / blockSize], // First row with one column
-          [y / blockSize]  // Second row with one column
+          [x],
+          [y]
         ];
 
         let input: Matrix2D = Matrix2D.FromArray(inputArray);
@@ -116,7 +126,8 @@ export class PixelCanvasComponent {
         let color = `rgb(${red}, ${green}, ${blue})`;
 
         ctx.fillStyle = color;
-        ctx.fillRect(x, y, blockSize, blockSize);
+        ctx.fillRect(x * (realWidth - blockSize), y * (realHeight - blockSize), blockSize, blockSize);
+
       }
     }
 
@@ -126,6 +137,19 @@ export class PixelCanvasComponent {
   delay(ms: number): Promise<void>
   {
     return new Promise(resolve => setTimeout(resolve, ms)); 
+  }
+
+  ResetNetwork() {
+    cancelAnimationFrame(this.AnimationFrameId); // Stop the existing animation
+    
+    this.network = new FullyConnectedNetwork(2, 10, 1);
+    this.AnimationFrameId = 0;
+
+    this.ngOnInit();
+  }
+
+  ngOnDestroy(): void {
+    cancelAnimationFrame(this.AnimationFrameId);
   }
 
 }
