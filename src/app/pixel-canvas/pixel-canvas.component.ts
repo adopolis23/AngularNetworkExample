@@ -19,20 +19,28 @@ export class PixelCanvasComponent {
 
   constructor()
   {
-    this.network = new FullyConnectedNetwork(2, 2, 1);
+    this.network = new FullyConnectedNetwork(2, 1, 1);
   
     this.virtualHeight = 10;
     this.virtualWidth = 10;
   }
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
     //this.network.PrintToConsole();
     let x: number = 0;
-    while (x < 1000)
+    while (x < 500)
     {
       this.drawCanvas();
       this.trainNetwork();
-      console.log(this.network.hidden_1.Data());
+      //await this.delay(500);
+      
+      //this is a test prediction to see in the console if all is working
+      let x_0: Matrix2D = Matrix2D.FromArray([[1], [1]]);
+      let output: Matrix2D = this.network.Predict(x_0);
+      
+      if (x % 100 == 0)
+      console.log(output.Data()[0][0]);
+
       x = x + 1;
     }
   }
@@ -88,8 +96,8 @@ export class PixelCanvasComponent {
 
     const blockSize: number = realHeight / this.virtualHeight;
 
-    for (let x = 0; x < realWidth-blockSize; x += blockSize) {
-      for (let y = 0; y < realHeight-blockSize; y += blockSize) {
+    for (let x = 0; x <= realWidth-blockSize; x += blockSize) {
+      for (let y = 0; y <= realHeight-blockSize; y += blockSize) {
         
         const inputArray: number[][] = [
           [x / blockSize], // First row with one column
@@ -107,13 +115,17 @@ export class PixelCanvasComponent {
 
         let color = `rgb(${red}, ${green}, ${blue})`;
 
-        //console.log("For Coords: " + x + "," + y + " pred: " + singleOutput + " Color: " + color);
-
         ctx.fillStyle = color;
         ctx.fillRect(x, y, blockSize, blockSize);
       }
     }
 
+  }
+
+  //delays the current thread? for ms milliseconds
+  delay(ms: number): Promise<void>
+  {
+    return new Promise(resolve => setTimeout(resolve, ms)); 
   }
 
 }

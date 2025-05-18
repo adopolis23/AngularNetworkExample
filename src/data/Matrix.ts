@@ -207,4 +207,15 @@ export class Matrix2D
         return result;
     }
 
+
+    public Copy(): Matrix2D
+    {
+        let copy: Matrix2D = new Matrix2D(this._rows, this._cols);
+
+        //created a true copy of the data
+        copy.SetData(this._data.map(row => [...row]));
+        
+        return copy;
+    }
+
 }
