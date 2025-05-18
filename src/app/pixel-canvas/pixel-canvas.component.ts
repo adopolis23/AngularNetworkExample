@@ -28,7 +28,7 @@ export class PixelCanvasComponent {
   async ngOnInit(): Promise<void> {
     //this.network.PrintToConsole();
     let x: number = 0;
-    while (x < 500)
+    while (x < 1000)
     {
       this.drawCanvas();
       this.trainNetwork();
