@@ -119,8 +119,20 @@ export class FullyConnectedNetwork
         predicted_output.Map(this.Sigmoid_Derivative);
         let output_delta: Matrix2D = output_error.Mul(predicted_output);
 
-        //let hidden_error: Matrix2D = output_delta.CrossProduct();
+        let hidden_error: Matrix2D = output_delta.CrossProduct(this.hidden_1);
 
+        let hidden_output_copy: Matrix2D = this.hidden_output.Copy();
+        hidden_output_copy.Map(this.Sigmoid_Derivative);
+        let hidden_delta: Matrix2D = hidden_error.Transpose().Mul(hidden_output_copy);
+
+        //update weights in the hidden to output layer
+        this.hidden_1 = this.hidden_1.Add( this.hidden_output.CrossProduct(output_delta).MulScalar(this.LearningRate).Transpose() );
+
+        this.bias_1 = this.bias_1.Add(output_delta.MulScalar(this.LearningRate));
+
+        this.hidden_0 = this.hidden_0.Add( input.CrossProduct(hidden_delta.Transpose()).MulScalar(this.LearningRate).Transpose() );
+
+        this.bias_0 = this.bias_0.Add(hidden_delta.MulScalar(this.LearningRate));
     }
 
 

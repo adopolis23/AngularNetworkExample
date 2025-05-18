@@ -114,7 +114,7 @@ export class Matrix2D
     {
         if (other.Cols() != this._cols || other.Rows() != this._rows)
         {
-            throw new Error("Rows and Cols length must match to add element-wise.");
+            throw new Error("Rows and Cols length must match to sub element-wise.");
         }
 
         let newData: number[][] = this._data.map((row, i) => row.map((value, j) => value - other.Data()[i][j]));
@@ -130,7 +130,7 @@ export class Matrix2D
     {
         if (other.Cols() != this._cols || other.Rows() != this._rows)
         {
-            throw new Error("Rows and Cols length must match to add element-wise.");
+            throw new Error("Rows and Cols length must match to mul element-wise.");
         }
 
         let newData: number[][] = this._data.map((row, i) => row.map((value, j) => value * other.Data()[i][j]));

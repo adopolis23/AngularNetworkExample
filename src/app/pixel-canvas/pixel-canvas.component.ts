@@ -19,7 +19,7 @@ export class PixelCanvasComponent {
 
   constructor()
   {
-    this.network = new FullyConnectedNetwork(2, 1, 1);
+    this.network = new FullyConnectedNetwork(2, 100, 1);
   
     this.virtualHeight = 10;
     this.virtualWidth = 10;

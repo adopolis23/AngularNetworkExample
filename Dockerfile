@@ -31,7 +31,7 @@ COPY package*.json .
 #might add --only=production to this after I fix the dependencies
 #RUN npm install
 
-COPY --from=build /usr/src/app/dist/first-app/browser /usr/share/nginx/html
+COPY --from=build /usr/src/app/dist/browser /usr/share/nginx/html
 
 EXPOSE 80
 
