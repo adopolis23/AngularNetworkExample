@@ -6,10 +6,8 @@ import { NumberValueAccessor } from '@angular/forms';
 @Component({
   selector: 'app-pixel-canvas',
   imports: [],
-  template: `
-    <canvas #canvas width="110" height="110" style="border: 1px solid black;"></canvas>
-    <button (click)="ResetNetwork()">Reset Network</button>
-  `,
+  standalone: true,
+  templateUrl: './pixel-canvas.component.html',
   styles: ``
 })
 export class PixelCanvasComponent {

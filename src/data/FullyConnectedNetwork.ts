@@ -65,51 +65,6 @@ export class FullyConnectedNetwork
     }
 
 
-    // public Train(input: Matrix2D, target: Matrix2D): void
-    // {
-
-    //     if (input.Rows() != this.hidden_0.Cols() || target.Rows() != this.hidden_1.Rows())
-    //     {
-    //         throw new Error("Input or Target dimentions do not match the network.");
-    //     }
-
-    //     let predictedOutput: Matrix2D = this.Predict(input);
-
-    //     let outputError: Matrix2D = target.Sub(predictedOutput);
-
-    //     //create a matrix to hold the predicted output times the derivative of sigmoid
-    //     let predictedOutputTimesSigmoidDer: Matrix2D = predictedOutput.Copy();
-    //     predictedOutputTimesSigmoidDer.Map(this.Sigmoid_Derivative);
-
-    //     let output_delta: Matrix2D = outputError.Mul(predictedOutputTimesSigmoidDer);
-
-    //     //transpose of the hidden to output weights
-    //     let hidden_1_t: Matrix2D = this.hidden_1.Transpose();
-
-    //     let hidden_error: Matrix2D = hidden_1_t.CrossProduct(output_delta);
-
-    //     //create a matrix to hold the hidden output times the derivative of sigmoid
-    //     let hiddenOutputTimesSigmoidDer: Matrix2D = this.hidden_output.Copy();
-    //     hiddenOutputTimesSigmoidDer.Map(this.Sigmoid_Derivative);
-
-    //     let hidden_delta: Matrix2D = hidden_error.Mul(hiddenOutputTimesSigmoidDer);
-
-    //     //update weights in the hidden to output layer
-    //     let hidden_1_delta: Matrix2D = this.hidden_output.CrossProduct(output_delta.Transpose()).MulScalar(this.LearningRate);
-    //     this.hidden_1 = this.hidden_1.Add(hidden_1_delta.Transpose());
-
-    //     //update bias in the ouput later - add the output delta to the bias times the learning rate.
-    //     this.bias_1 = this.bias_1.Add(output_delta.MulScalar(this.LearningRate));
-
-    //     //update the weights in the input to hidden layer
-    //     let hidden_0_delta: Matrix2D = input.CrossProduct(hidden_delta).MulScalar(this.LearningRate)
-    //     this.hidden_0 = this.hidden_0.Add(hidden_0_delta.Transpose());
-
-    //     //update the bias in the hidden layer
-    //     this.bias_0 = this.bias_1.Add(hidden_delta.MulScalar(this.LearningRate));
-    // }
-
-
     public Train(input: Matrix2D, target: Matrix2D): void
     {
         let predicted_output: Matrix2D = this.Predict(input);
