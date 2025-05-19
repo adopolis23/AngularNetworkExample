@@ -140,7 +140,7 @@ export class PixelCanvasComponent {
   ResetNetwork() {
     cancelAnimationFrame(this.AnimationFrameId); // Stop the existing animation
     
-    this.network = new FullyConnectedNetwork(2, 10, 1);
+    this.network = new FullyConnectedNetwork(2, 25, 1);
     this.AnimationFrameId = 0;
 
     this.ngOnInit();
